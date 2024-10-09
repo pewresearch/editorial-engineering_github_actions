@@ -1,0 +1,15 @@
+name: 'Label Manager'
+
+description: 'Assigns certain users to issues when certain labels are applied to the issue'
+
+inputs:
+    label-config:
+        description: 'Stringified JSON mapping array of assignees to certain labels'
+        default: '{"labels":{"chart-builder":{"assignees":["benwormald"]},"feature":{"assignees":["chrisentery"]},"f-":{"assignees":["chrisentery"]}}}'
+        required: true
+    repo-token:
+        description: 'Token with permissions to do repo things'
+
+runs:
+    using: 'node20'
+    main: 'dist/index.js'

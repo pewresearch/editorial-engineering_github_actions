@@ -1,0 +1,25 @@
+name: Release PRC-Scripts
+on:
+  release:
+    types: [published]
+
+jobs:
+  release-prc-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Release PRC Scripts To Repo
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.PRC_PLATFORM_GITHUB_BOT_TOKEN }}
+        with:
+          source-directory: 'plugins/prc-scripts'
+          destination-github-username: 'prcdevgitbot'
+          destination-repository-username: 'pewresearch'
+          destination-repository-name: 'prc-scripts'
+          user-email: 'webdev@pewresearch.org'
+          commit-message: See ORIGIN_COMMIT from $GITHUB_REF
+          target-branch: main

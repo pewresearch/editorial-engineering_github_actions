@@ -1,0 +1,25 @@
+name: Release PRC-Platform-Core
+on:
+  release:
+    types: [published]
+
+jobs:
+  release-prc-platform-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Release PRC Platform Core To Repo
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.PRC_PLATFORM_GITHUB_BOT_TOKEN }}
+        with:
+          source-directory: 'plugins/prc-platform-core'
+          destination-github-username: 'prcdevgitbot'
+          destination-repository-username: 'pewresearch'
+          destination-repository-name: 'prc-platform-core'
+          user-email: 'webdev@pewresearch.org'
+          commit-message: See ORIGIN_COMMIT from $GITHUB_REF
+          target-branch: main

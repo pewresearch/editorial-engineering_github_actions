@@ -1,0 +1,70 @@
+name: 'Deploy Manager'
+description: 'Deploy action for VIP servers'
+inputs:
+  WPVIP_DEPLOY_TOKEN:
+    description: 'The deploy token for WPVIP'
+    required: true
+  ENVIRONMENT_ALIAS:
+    description: 'The environment alias for deployment. Format should be "@APPID.ENVIRONMENT"'
+  RELEASE_NAME:
+    description: 'The name of the release'
+    required: true
+  DEPLOY_BRANCH:
+    description: 'The branch that the deploy package will generate from.'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: "Check Configuration"
+      run: |
+        if [ -n "${{ inputs.WPVIP_DEPLOY_TOKEN }}" ]; then
+          echo "Repository has the secrets set."
+        else
+          echo "WPVIP_DEPLOY_TOKEN is not configured."
+          echo "Save the deploy token as WPVIP_DEPLOY_TOKEN."
+          exit 1
+        fi
+
+        if [ -z "${{ inputs.ENVIRONMENT_ALIAS }}" ]; then
+          echo "ENVIRONMENT_ALIAS must be set."
+          exit 1
+        fi
+
+        DEPLOY_ENVIRONMENT="${{ inputs.ENVIRONMENT_ALIAS }}"
+
+        echo "DEPLOY_ENVIRONMENT=${DEPLOY_ENVIRONMENT}" >> $GITHUB_ENV
+
+      shell: bash
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.DEPLOY_BRANCH }}
+
+    - name: Setup Node
+      uses: actions/setup-node@v4.0.2
+      with:
+        node-version: "v20.11.1"
+
+    - name: Install VIP CLI
+      run: |
+        npm install -g @automattic/vip
+      shell: bash
+
+    - name: Compress Package
+      run: |
+        mkdir wrap_folder
+        shopt -s extglob
+        cp -r !(wrap_folder) wrap_folder/
+        zip -r repo.zip wrap_folder
+        FILE_SIZE_MB=$(du -m repo.zip | cut -f1)
+        echo "The size of the release package is ${FILE_SIZE_MB} MB"
+      shell: bash
+
+    - name: Deploy via VIP-CLI
+      run: |
+        vip app deploy ${{ env.DEPLOY_ENVIRONMENT }} ./repo.zip --message "${{ inputs.RELEASE_NAME }}" --force
+      shell: bash
+      env:
+        WPVIP_DEPLOY_TOKEN: ${{ inputs.WPVIP_DEPLOY_TOKEN }}

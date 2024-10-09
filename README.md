@@ -1,2 +1,3 @@
-# editorial-engineering_github_actions
+# Editorial Engineering GitHub Actions
+
 Common actions and workflows for GitHub
