@@ -31,7 +31,7 @@ jobs:
     permissions:
       pull-requests: read
     steps:
-      - uses: Automattic/vip-actions/changelog@trunk
+      - uses: pewresearch/editorial-engineering_github_actions/changelog@trunk
         with:
           endpoint-token: ${{ secrets.CHANGELOG_POST_TOKEN }}
           link-to-pr: 'true'

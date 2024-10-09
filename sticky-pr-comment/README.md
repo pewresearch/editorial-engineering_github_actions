@@ -11,7 +11,7 @@ Raw message:
 ```yaml
 steps:
   - name: Post PR comment
-    uses: Automattic/vip-actions/sticky-pr-comment@trunk
+        uses: pewresearch/editorial-engineering_github_actions/sticky-pr-comment@trunk
     with:
       header: my-comment-name
       message: |
@@ -24,7 +24,7 @@ From file:
 ```yaml
 steps:
   - name: Post PR comment
-    uses: Automattic/vip-actions/sticky-pr-comment@trunk
+    uses: pewresearch/editorial-engineering_github_actions/sticky-pr-comment@trunk
     with:
       header: my-comment-name
       path: path/to/comment.md

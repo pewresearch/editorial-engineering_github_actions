@@ -29,13 +29,13 @@ Combine this action with the `sticky-pr-comment` action to post a code coverage 
 ```yaml
 steps:
   - name: Prepare coverage report in markdown
-    uses: Automattic/vip-actions/coverage-pr-comment@trunk
+    uses: pewresearch/editorial-engineering_github_actions/coverage-pr-comment@trunk
     id: coverage
     with:
       textReportPath: './coverage/coverage.txt'
 
   - name: Post coverage comment when coverage exists
-    uses: Automattic/vip-actions/sticky-pr-comment@trunk
+    uses: pewresearch/editorial-engineering_github_actions/coverage-pr-comment@trunk
     with:
       header: code-coverage
       message: ${{ steps.coverage.outputs.markdownReport }}
