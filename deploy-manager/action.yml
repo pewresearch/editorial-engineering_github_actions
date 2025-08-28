@@ -49,7 +49,7 @@ runs:
 
     - name: Install VIP CLI
       run: |
-        npm install -g @automattic/vip
+        npm i -g @automattic/vip@3.19.2
       shell: bash
 
     - name: Compress Package
